@@ -1,0 +1,2 @@
+module SharedTextsHelper
+end

@@ -1,0 +1,18 @@
+<h1>Shared Text</h1>
+
+<%= form_with model: SharedTexts.new, url: shared_texts_path do |form| %>
+  <div>
+    <%= form.label :content %><br>
+    <%= form.text_area :content %>
+  </div>
+  <div>
+    <%= form.submit "Share" %>
+  </div>
+<%end%>
+
+<h2>Shared Texts</h2>
+<ul>
+  <% @shared_texts.each do |shared_texts| %>
+    <li><%= shared_texts.content %></li>
+  <%end%>
+</ul>

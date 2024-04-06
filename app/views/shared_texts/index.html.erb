@@ -1,6 +1,24 @@
 <h1>Shared Text</h1>
 
-<%= form_with model: SharedTexts.new, url: shared_texts_path do |form| %>
+<% if @qr_code_svg.present? %>
+  <div>
+    <h2>QR Code</h2>
+    <%= raw @qr_code_svg %>
+  </div>
+<%end%>
+
+<% if @shared_texts.present? %>
+  <ul>
+    <% @shared_texts.each do |shared_text| %>
+      <li><%= shared_text.content %></li>
+    <%end%>
+  </ul>
+<% end %>
+
+<%= form_with model: SharedText.new, url: shared_texts_path(room_key: params[:room_key]), local: true do |form| %>
+  <% if params[:room_key].present? %>
+    <%= form.hidden_field :room_key, value: params[:room_key] %>
+  <% end %>
   <div>
     <%= form.label :content %><br>
     <%= form.text_area :content %>
@@ -10,9 +28,4 @@
   </div>
 <%end%>
 
-<h2>Shared Texts</h2>
-<ul>
-  <% @shared_texts.each do |shared_texts| %>
-    <li><%= shared_texts.content %></li>
-  <%end%>
-</ul>
+

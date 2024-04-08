@@ -28,6 +28,10 @@ class SharedTextsController < ApplicationController
     end
   end
 
+  def fetch_texts
+    @shared_texts = SharedText.where(room_key: params[:room_key])
+    render json: @shared_texts
+  end
 
   private
 

@@ -1,4 +1,4 @@
-<h1>Shared Text</h1>
+<a href="/"><h1>Shared Text</h1></a>
 
 <% if @qr_code_svg.present? %>
   <div>
@@ -10,7 +10,7 @@
 <% if @shared_texts.present? %>
   <ul>
     <% @shared_texts.each do |shared_text| %>
-      <li><%= shared_text.content %></li>
+      <li><%= simple_format(shared_text.content, {}, wrapper_tag: "div") %></li>
     <%end%>
   </ul>
 <% end %>
@@ -28,4 +28,27 @@
   </div>
 <%end%>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const intervalId = setInterval(function() {
+      fetch(`/shared_texts/fetch_texts?room_key=${encodeURIComponent('<%= params[:room_key] %>')}`)
+      .then(response => response.json())
+      .then(data => {
+        let list = document.querySelector('ul')
+        list.innerHTML = "";
+        data.forEach(text => {
+          console.log(text)
+          let listItem = document.createElement('li')
+          const replacedText = text.content.replace(/\n+/g, '\n')
+          listItem.innerHTML = replacedText.replace(/\n/g, '<br />');
+          list.appendChild(listItem)
+        });
+      })
+      .catch(error => console.error('Error:', error))
+    }, 5000);
+    document.addEventListener('beforeunload', function() {
+      clearInterval(intervalId)
+    })
+  })
+</script>
 
